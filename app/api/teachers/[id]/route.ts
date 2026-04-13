@@ -4,32 +4,31 @@ import { supabase } from "@/lib/supabase";
 // GET a single teacher
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const { data, error } = await supabase
       .from("teachers")
       .select("*")
-      .eq("id", params.id)
+      .eq("id", id)
       .single();
 
     if (error) throw error;
     if (!data) return NextResponse.json({ error: "Teacher not found" }, { status: 404 });
     return NextResponse.json(data);
   } catch (err) {
-    console.error(`GET /api/teachers/${params.id} failed:`, err);
-    return NextResponse.json(
-      { error: "Failed to fetch teacher" },
-      { status: 500 }
-    );
+    console.error(`GET /api/teachers/${id} failed:`, err);
+    return NextResponse.json({ error: "Failed to fetch teacher" }, { status: 500 });
   }
 }
 
 // PUT update a teacher
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body = await req.json();
     const { name, email, phone } = body;
@@ -37,7 +36,7 @@ export async function PUT(
     const { data, error } = await supabase
       .from("teachers")
       .update({ name, email, phone, updated_at: new Date().toISOString() })
-      .eq("id", params.id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -45,32 +44,27 @@ export async function PUT(
     if (!data) return NextResponse.json({ error: "Teacher not found" }, { status: 404 });
     return NextResponse.json(data);
   } catch (err) {
-    console.error(`PUT /api/teachers/${params.id} failed:`, err);
-    return NextResponse.json(
-      { error: "Failed to update teacher" },
-      { status: 500 }
-    );
+    console.error(`PUT /api/teachers/${id} failed:`, err);
+    return NextResponse.json({ error: "Failed to update teacher" }, { status: 500 });
   }
 }
 
 // DELETE a teacher
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const { error } = await supabase
       .from("teachers")
       .delete()
-      .eq("id", params.id);
+      .eq("id", id);
 
     if (error) throw error;
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error(`DELETE /api/teachers/${params.id} failed:`, err);
-    return NextResponse.json(
-      { error: "Failed to delete teacher" },
-      { status: 500 }
-    );
+    console.error(`DELETE /api/teachers/${id} failed:`, err);
+    return NextResponse.json({ error: "Failed to delete teacher" }, { status: 500 });
   }
 }
