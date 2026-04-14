@@ -261,7 +261,7 @@ export default function InputPanel() {
                   <input
                     type="number"
                     min={1}
-                    max={10}
+                    max={12}
                     value={s.frequencyPerWeek}
                     onChange={(e) =>
                       setInput({
