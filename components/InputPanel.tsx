@@ -204,7 +204,7 @@ export default function InputPanel() {
             <input
               type="range"
               min={4}
-              max={10}
+              max={14}
               value={slotCount}
               onChange={(e) =>
                 setInput({ ...input, timeSlotsPerDay: parseInt(e.target.value) })
@@ -213,7 +213,7 @@ export default function InputPanel() {
             />
             <div className="flex justify-between text-xs text-slate-400">
               <span>4</span>
-              <span>10</span>
+              <span>14</span>
             </div>
           </div>
         </div>
